@@ -9,7 +9,7 @@ export const getImagesByQuery = (query) => {
         key: myApiKey,
         q: query,
         image_type: 'photo',
-        orientation: 'horisontal',
+        orientation: 'horizontal',
         safesearch: true,
     };
    
