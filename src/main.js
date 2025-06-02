@@ -5,7 +5,7 @@ import "izitoast/dist/css/iziToast.min.css";
 
 // // імпортуємо власні функції
 import { getImagesByQuery } from './js/pixabay-api';
-// // import './js/render-functions.js';
+import { createGallery, clearGallery, showLoader, hideLoader } from './js/render-functions.js';
 
 const formEl = document.querySelector('.form');
 
@@ -13,10 +13,12 @@ formEl.addEventListener('submit', handlerFormSbmt);
 
 function handlerFormSbmt(evt) { 
     evt.preventDefault();
+    clearGallery();
+
     const textForSearch = formEl.elements['search-text'].value.trim();
     
     if (textForSearch !== '') {
-    //   console.log(textForSearch);
+        showLoader();
         getImagesByQuery(textForSearch)
             .then(res => {
                 if (res.hits.length === 0) {
@@ -28,9 +30,10 @@ function handlerFormSbmt(evt) {
                         position: 'topRight',
                     });
                 } else {
-                    console.log(res);
+                    createGallery(res.hits);
+                    formEl.reset();
                 }
-        })
+            })
             .catch(err => {
                 iziToast.show({
                     title: '',
@@ -39,7 +42,10 @@ function handlerFormSbmt(evt) {
                     messageColor: 'rgb(255, 255, 255)',
                     position: 'topRight',
                 });
-        });
+            })
+            .finally(() => 
+                hideLoader()
+            );
         
     } else { 
         iziToast.show({

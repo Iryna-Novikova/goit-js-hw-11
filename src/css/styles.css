@@ -11,4 +11,6 @@
 @import url('./animations.css');
 
 /* Sections style */
-@import url('./main.css');
+@import url('./form.css');
+@import url('./gallery.css');
+@import url('./loader.css');

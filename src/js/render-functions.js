@@ -1,6 +1,62 @@
-// У файлі render-functions.js створи екземпляр SimpleLightbox для роботи з модальним вікном та зберігай функції для відображення елементів інтерфейсу:
+//імпортуємо з бібліотеки simplelightbox
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-// createGallery(images). Ця функція повинна приймати масив images, створювати HTML-розмітку для галереї, додавати її в контейнер галереї та викликати метод екземпляра SimpleLightbox refresh(). Нічого не повертає.
-// clearGallery(). Ця функція нічого не приймає та повинна очищати вміст контейнера галереї. Нічого не повертає.
-// showLoader(). Ця функція нічого не приймає, повинна додавати клас для відображення лоадера. Нічого не повертає.
-// hideLoader(). Ця функція нічого не приймає, повинна прибирати клас для відображення лоадера. Нічого не повертає.
+const galleryListElem = document.querySelector('.gallery');
+const loaderElm = document.querySelector('.loader');
+
+//екземпляр SimpleLightbox для роботи з модальним вікном
+const Lightbox = new SimpleLightbox('.gallery a', { 
+    captionsData: 'alt',
+    captionDelay: 250,
+    captionPosition: 'bottom',
+  });
+
+// створення елементу розмітки для однієї картинки
+function getListElemMrkup(image) {
+    return `<li class="gallery-item">
+    <a class="gallery-link" href="${image.webformatURL}">
+      <img
+        class="gallery-image"
+        src="${image.largeImageURL}"
+        alt="${image.tags}"
+      /> 
+    <div class="img-info">
+      <div class="img-info-descr">
+         <h2 class="img-info-header">likes</h2>
+         <p class="img-info-p">${image.likes}</p>
+      </div>
+      <div class="img-info-descr">
+         <h2 class="img-info-header">views</h2>
+         <p class="img-info-p">${image.views}</p>
+      </div>
+      <div class="img-info-descr">
+         <h2 class="img-info-header">comments</h2>
+         <p class="img-info-p">${image.comments}</p>
+      </div>
+      <div class="img-info-descr">
+         <h2 class="img-info-header">downloads</h2>
+         <p class="img-info-p">${image.downloads}</p>
+      </div>      
+      </div>          
+    </a>
+    </li>`; 
+}
+
+export function createGallery(images) { 
+    const listImagesMrkup = images.map(getListElemMrkup).join('\n');
+    galleryListElem.insertAdjacentHTML("afterbegin", listImagesMrkup);
+    Lightbox.refresh();
+}
+
+export function clearGallery() { 
+    galleryListElem.innerHTML = '';
+}
+
+export function showLoader() { 
+    loaderElm.classList.remove('hidden');
+}
+
+export function hideLoader() { 
+    loaderElm.classList.add('hidden');
+}
